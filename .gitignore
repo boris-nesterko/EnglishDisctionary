@@ -3,3 +3,5 @@
 ################################################################################
 
 /Domain/obj
+/packages/Microsoft.Net.Compilers.1.3.2
+/UnitTests/obj

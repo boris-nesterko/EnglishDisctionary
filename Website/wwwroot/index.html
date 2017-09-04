@@ -1,10 +1,60 @@
 ﻿<!DOCTYPE html>
 <html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<link rel="stylesheet" type="text/css" href="styles.css">
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <script type="text/javascript">
+        var app = angular.module('EnglishDictionary', []);
+        app.controller('wordsController', function ($scope, $http) {
+            $scope.currentTab = 'a';
+            $scope.tabs = [];
+            $scope.alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+            $scope.alphabet.forEach(function (letter) {
+                $scope.tabs[letter] = [];
+            });
+
+            $scope.getWords = function () {
+                $http({
+                    url: "/api/words",
+                    method: "GET",
+                    params: { from: $scope.from, to: $scope.to }
+                }).then(function (response) {
+                    response.data.forEach(function (word) {
+                        if ($scope.tabs[word[0]]) {
+                            $scope.tabs[word[0]].push(word);
+                        }
+                    });
+                });
+            };
+
+            $scope.switchTab = function (index) {
+                $scope.currentTab = index;
+            };
+
+            $scope.isSet = function (index) {
+                return $scope.currentTab == index;
+            };
+        });
+    </script>
 </head>
-<body>
-    Hello World
+<body class="container">
+    <h1>English Dictionary</h1>
+    <div ng-app="EnglishDictionary" ng-controller="wordsController">
+        <p>From : <input type="text" ng-model="from"></p>
+        <p>To : <input type="text" ng-model="to"></p>
+        <button ng-click="getWords()">Get words</button>
+        <br />
+
+        <button ng-repeat="letter in alphabet" ng-disabled="isSet(letter)" ng-click="switchTab(letter)" ng-show="tabs[letter].length > 0">{{letter}}</button>
+
+        <div ng-repeat="letter in alphabet" ng-show="isSet(letter)">
+            <ul>
+                <li ng-repeat="word in tabs[letter]">{{word}}</li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

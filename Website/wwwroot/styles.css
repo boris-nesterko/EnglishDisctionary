@@ -1,0 +1,12 @@
+﻿.container {
+    width: 400px;
+    margin: auto;
+}
+
+button {
+    margin-bottom: 20px;
+}
+
+h1, p, a {
+    color: #4DC9C9 !important;
+}

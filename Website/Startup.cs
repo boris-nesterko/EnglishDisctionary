@@ -45,6 +45,8 @@ namespace EnglishDictionary.Website
 					 name: "default",
 					 template: "{controller=Words}/{action=Get}/");
 			});
+			app.UseDefaultFiles();
+			app.UseStaticFiles();
 		}
 
 		private IWordsDB InitializeWordsDB(IServiceProvider arg)
